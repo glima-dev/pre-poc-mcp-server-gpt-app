@@ -10,9 +10,30 @@ import {
 } from 'swiper/react';
 
 import OfferCard from './components/offer-card';
-import { offers } from './data/Offers';
+import { offers as localOffers } from './data/Offers';
+import useToolResult from './hooks/useToolResult';
+
+type Offer = {
+  id: number;
+  modelo: string;
+  versao: string;
+  franquiaKm: string;
+  prazo: string;
+  cor: string;
+  valor: number;
+};
 
 const App = () => {
+  const toolResult = useToolResult();
+  const structuredContent = toolResult?.structuredContent;
+
+  const isStandalone = window.parent === window;
+
+  const offers =
+    (structuredContent?.offers as Offer[] | undefined) ?? (isStandalone ? localOffers : []);
+  const city = structuredContent?.city ?? (isStandalone ? 'Belo Horizonte' : '');
+  const period = structuredContent?.period ?? (isStandalone ? '13/03 a 16/03' : '');
+
   return (
     <main className='App'>
       <header className='App__header'>
@@ -22,24 +43,36 @@ const App = () => {
 
         <p className='App__description'>Estrutura mínima em React, TypeScript, Webpack e SCSS.</p>
 
-        <p className='App__context'>13/03 a 16/03 • Belo Horizonte</p>
+        {(period || city) && (
+          <p className='App__context'>
+            {period}
+            {period && city ? ' • ' : ''}
+            {city}
+          </p>
+        )}
       </header>
 
-      <section className='App__carousel-wrapper' aria-label='Lista de ofertas'>
-        <Swiper
-          className='App__carousel'
-          modules={[FreeMode, A11y]}
-          slidesPerView='auto'
-          spaceBetween={12}
-          freeMode
-          grabCursor>
-          {offers.map((offer) => (
-            <SwiperSlide key={offer.id} className='App__slide'>
-              <OfferCard offer={offer} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section>
+      {offers.length > 0 ? (
+        <section className='App__carousel-wrapper' aria-label='Lista de ofertas'>
+          <Swiper
+            className='App__carousel'
+            modules={[FreeMode, A11y]}
+            slidesPerView='auto'
+            spaceBetween={12}
+            freeMode
+            grabCursor>
+            {offers.map((offer) => (
+              <SwiperSlide key={offer.id} className='App__slide'>
+                <OfferCard offer={offer} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </section>
+      ) : (
+        <section className='App__empty'>
+          <p className='App__empty-text'>Nenhuma oferta encontrada para os filtros informados.</p>
+        </section>
+      )}
     </main>
   );
 };
