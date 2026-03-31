@@ -1,51 +1,56 @@
+import { useState } from 'react';
+
 import { Offer } from '../../data/Offers';
 import './index.scss';
 
 type Props = {
   offer: Offer;
+  onClick?: (offer: Offer) => void;
 };
 
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(value);
-};
+const OfferCard = ({ offer, onClick }: Props) => {
+  const [hasImageError, setHasImageError] = useState(false);
 
-const OfferCard = ({ offer }: Props) => {
+  const handleOpenOffer = () => {
+    onClick?.(offer);
+  };
+
   return (
-    <article className='OfferCard'>
-      <div className='OfferCard__header'>
-        <span className='OfferCard__brand'>Volkswagen</span>
-        <h2 className='OfferCard__model'>{offer.modelo}</h2>
-        <p className='OfferCard__version'>{offer.versao}</p>
-      </div>
+    <article className='OfferGridCard'>
+      <div className='OfferGridCard__top'>
+        <div className='OfferGridCard__header'>
+          <div className='OfferGridCard__title-row'>
+            <h2 className='OfferGridCard__title'>{offer.name}</h2>
+          </div>
 
-      <ul className='OfferCard__details'>
-        <li className='OfferCard__detail'>
-          <span className='OfferCard__detail-label'>Franquia</span>
-          <strong className='OfferCard__detail-value'>{offer.franquiaKm}</strong>
-        </li>
-
-        <li className='OfferCard__detail'>
-          <span className='OfferCard__detail-label'>Prazo</span>
-          <strong className='OfferCard__detail-value'>{offer.prazo}</strong>
-        </li>
-
-        <li className='OfferCard__detail'>
-          <span className='OfferCard__detail-label'>Cor</span>
-          <strong className='OfferCard__detail-value'>{offer.cor}</strong>
-        </li>
-      </ul>
-
-      <div className='OfferCard__footer'>
-        <div className='OfferCard__price-block'>
-          <span className='OfferCard__price-label'>Valor mensal</span>
-          <p className='OfferCard__price'>{formatCurrency(offer.valor)}</p>
+          <p className='OfferGridCard__subtitle'>
+            {offer.model} • {offer.year}
+          </p>
         </div>
 
-        <button className='OfferCard__button' type='button'>
-          Ver oferta
+        <div className='OfferGridCard__price'>
+          <span className='OfferGridCard__price-label'>A partir de</span>
+
+          <p className='OfferGridCard__price-value'>
+            {offer.bestCondition.moneyMonthlyInstallment.format}{' '}
+            <span className='OfferGridCard__price-suffix'>/ mês</span>
+          </p>
+        </div>
+      </div>
+
+      <div className='OfferGridCard__image'>
+        {!hasImageError ? (
+          <img src={offer.image} alt={offer.model} onError={() => setHasImageError(true)} />
+        ) : (
+          <div className='OfferGridCard__image-fallback'>
+            <span className='OfferGridCard__image-fallback-text'>Imagem indisponível</span>
+          </div>
+        )}
+      </div>
+
+      <div className='OfferGridCard__action'>
+        <button className='OfferGridCard__button' type='button' onClick={handleOpenOffer}>
+          Ver Detalhe
         </button>
       </div>
     </article>
