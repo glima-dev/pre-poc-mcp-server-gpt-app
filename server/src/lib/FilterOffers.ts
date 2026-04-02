@@ -5,7 +5,6 @@ type TextFilter = string | string[];
 export type OfferFilters = {
   query?: string;
 
-  // filtros textuais
   name?: TextFilter;
   model?: TextFilter;
   slug?: TextFilter;
@@ -18,10 +17,8 @@ export type OfferFilters = {
   description?: TextFilter;
   deliveryInfo?: TextFilter;
 
-  // uso interno
   modelCode?: TextFilter;
 
-  // booleanos
   isElectric?: boolean;
   hasShield?: boolean;
   fastDelivery?: boolean;
@@ -29,7 +26,6 @@ export type OfferFilters = {
   isAllUnavailable?: boolean;
   isDeadlineWithinLimit?: boolean;
 
-  // numéricos
   deadline?: number;
   minDeadline?: number;
   maxDeadline?: number;
