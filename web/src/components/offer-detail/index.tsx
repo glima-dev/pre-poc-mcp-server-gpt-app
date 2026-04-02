@@ -4,28 +4,48 @@ import './index.scss';
 type Props = {
   offer: Offer;
   onClose: () => void;
+  variant?: 'inline' | 'fullscreen';
 };
 
-const OfferDetail = ({ offer, onClose }: Props) => {
+const OfferDetail = ({ offer, onClose, variant = 'inline' }: Props) => {
+  const isFullscreen = variant === 'fullscreen';
   const deliveryInfo = offer.bestCondition.deadlineInfo || offer.deadlineInfo;
   const colorInfo = `${offer.bestCondition.color.color} • ${offer.bestCondition.color.typeOfPainting}`;
 
   return (
-    <section className='OfferDetail' aria-label='Detalhes da oferta'>
+    <section
+      className={`OfferDetail ${isFullscreen ? 'OfferDetail--fullscreen' : 'OfferDetail--inline'}`}
+      aria-label='Detalhes da oferta'>
       <div className='OfferDetail__panel'>
-        <div className='OfferDetail__topbar'>
-          <button
-            className='OfferDetail__back'
-            type='button'
-            aria-label='Voltar para a lista'
-            onClick={onClose}>
-            ←
-          </button>
-        </div>
+        {/*         <div className='OfferDetail__topbar'>
+          {isFullscreen ? (
+            <>
+              <div className='OfferDetail__topbar-brand'>LM Rental Pre POC</div>
+
+              <button
+                className='OfferDetail__close'
+                type='button'
+                aria-label='Fechar detalhe da oferta'
+                onClick={onClose}>
+                ×
+              </button>
+            </>
+          ) : (
+            <button
+              className='OfferDetail__back'
+              type='button'
+              aria-label='Voltar para a lista'
+              onClick={onClose}>
+              ←
+            </button>
+          )}
+        </div> */}
 
         <div className='OfferDetail__content'>
           <div className='OfferDetail__media'>
             <p className='OfferDetail__eyebrow'>Carro por Assinatura {offer.name}</p>
+
+            {isFullscreen && <h1 className='OfferDetail__title'>{offer.name}</h1>}
 
             <p className='OfferDetail__subtitle'>
               {offer.model} • {offer.year}

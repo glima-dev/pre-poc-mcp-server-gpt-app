@@ -16,10 +16,15 @@ import './index.scss';
 type Props = {
   offers: Offer[];
   onOfferClick?: (offer: Offer) => void;
+  shouldShowEmptyState?: boolean;
 };
 
-const OfferList = ({ offers, onOfferClick }: Props) => {
+const OfferList = ({ offers, onOfferClick, shouldShowEmptyState = true }: Props) => {
   if (!offers.length) {
+    if (!shouldShowEmptyState) {
+      return null;
+    }
+
     return (
       <section className='OfferList__empty' aria-live='polite'>
         <div className='OfferList__empty-content'>
@@ -39,7 +44,7 @@ const OfferList = ({ offers, onOfferClick }: Props) => {
         className='OfferList__carousel'
         modules={[FreeMode, A11y]}
         slidesPerView='auto'
-        spaceBetween={12}
+        spaceBetween={16}
         freeMode
         grabCursor>
         {offers.map((offer) => (

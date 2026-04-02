@@ -1,40 +1,50 @@
 import {
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
+import type { Offer } from '../data/Offers';
+
 export type ToolStructuredContent = {
   city?: string;
-  period?: string;
   resultCount?: number;
   appliedFilters?: Record<string, unknown>;
-  offers?: Array<{
-    id: number;
-    modelo: string;
-    versao: string;
-    franquiaKm: string;
-    prazo: string;
-    cor: string;
-    valor: number;
-  }>;
+  offers?: Offer[];
 };
 
-type ToolResult = {
+export type WidgetViewState = {
+  selectedOfferId?: string | null;
+};
+
+export type WidgetDisplayMode = 'inline' | 'pip' | 'fullscreen' | string;
+
+type OpenAiGlobals = {
+  toolOutput?: ToolStructuredContent;
+  widgetState?: WidgetViewState | null;
+  displayMode?: WidgetDisplayMode;
+};
+
+export type ToolResult = {
   structuredContent?: ToolStructuredContent;
   content?: Array<{ type: string; text?: string }>;
   _meta?: Record<string, unknown>;
 } | null;
 
 type OpenAiGlobalsEvent = CustomEvent<{
-  globals?: {
-    toolOutput?: ToolStructuredContent;
-  };
+  globals?: OpenAiGlobals;
 }>;
 
 declare global {
   interface Window {
     openai?: {
       toolOutput?: ToolStructuredContent;
+      widgetState?: WidgetViewState | null;
+      displayMode?: WidgetDisplayMode;
+      maxHeight?: number;
+      setWidgetState?: (state: WidgetViewState) => void;
+      requestDisplayMode?: (options: { mode: 'inline' | 'pip' | 'fullscreen' }) => Promise<unknown>;
+      notifyIntrinsicHeight?: () => void;
     };
   }
 
@@ -56,7 +66,11 @@ const getInitialToolResult = (): ToolResult => {
 };
 
 const useToolResult = () => {
-  const [toolResult, setToolResult] = useState<ToolResult>(getInitialToolResult);
+  const initialToolResult = useMemo(getInitialToolResult, []);
+  const [toolResult, setToolResult] = useState<ToolResult>(initialToolResult);
+  const [hasResolvedStructuredContent, setHasResolvedStructuredContent] = useState(
+    Boolean(initialToolResult?.structuredContent),
+  );
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -74,7 +88,14 @@ const useToolResult = () => {
         return;
       }
 
-      setToolResult(message.params ?? null);
+      const nextToolResult = message.params as ToolResult | undefined;
+
+      if (!nextToolResult?.structuredContent) {
+        return;
+      }
+
+      setToolResult(nextToolResult);
+      setHasResolvedStructuredContent(true);
     };
 
     const handleGlobals = (event: OpenAiGlobalsEvent) => {
@@ -87,6 +108,7 @@ const useToolResult = () => {
       setToolResult({
         structuredContent: toolOutput,
       });
+      setHasResolvedStructuredContent(true);
     };
 
     window.addEventListener('message', handleMessage, { passive: true });
@@ -98,7 +120,10 @@ const useToolResult = () => {
     };
   }, []);
 
-  return toolResult;
+  return {
+    toolResult,
+    hasResolvedStructuredContent,
+  };
 };
 
 export default useToolResult;
