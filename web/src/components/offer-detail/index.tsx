@@ -17,30 +17,6 @@ const OfferDetail = ({ offer, onClose, variant = 'inline' }: Props) => {
       className={`OfferDetail ${isFullscreen ? 'OfferDetail--fullscreen' : 'OfferDetail--inline'}`}
       aria-label='Detalhes da oferta'>
       <div className='OfferDetail__panel'>
-        {/*         <div className='OfferDetail__topbar'>
-          {isFullscreen ? (
-            <>
-              <div className='OfferDetail__topbar-brand'>LM Rental Pre POC</div>
-
-              <button
-                className='OfferDetail__close'
-                type='button'
-                aria-label='Fechar detalhe da oferta'
-                onClick={onClose}>
-                ×
-              </button>
-            </>
-          ) : (
-            <button
-              className='OfferDetail__back'
-              type='button'
-              aria-label='Voltar para a lista'
-              onClick={onClose}>
-              ←
-            </button>
-          )}
-        </div> */}
-
         <div className='OfferDetail__content'>
           <div className='OfferDetail__media'>
             <p className='OfferDetail__eyebrow'>Carro por Assinatura {offer.name}</p>
@@ -108,6 +84,16 @@ const OfferDetail = ({ offer, onClose, variant = 'inline' }: Props) => {
               </dl>
             </div>
           </aside>
+
+          <div className='OfferDetail__action'>
+            <a
+              className='OfferDetail__action-link'
+              href={`https://vwsignanddrive.com.br/ofertasvw/${offer.slug}?versao=${offer.modelCode}`}
+              target='_blank'
+              rel='noreferrer'>
+              Simular agora
+            </a>
+          </div>
         </div>
       </div>
     </section>

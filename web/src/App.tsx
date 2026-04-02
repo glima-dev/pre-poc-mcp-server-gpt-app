@@ -1,4 +1,5 @@
 import {
+  CSSProperties,
   useEffect,
   useMemo,
   useState,
@@ -10,10 +11,9 @@ import {
   Offer,
   offers as localOffers,
 } from './data/Offers';
-import useToolResult, {
-  WidgetDisplayMode,
-  WidgetViewState,
-} from './hooks/useToolResult';
+import useToolResult from './hooks/useToolResult';
+
+import type { OpenAiSafeArea, WidgetDisplayMode, WidgetViewState } from './types/OpenAi';
 
 const normalizeWidgetState = (state?: WidgetViewState | null): WidgetViewState => {
   return {
@@ -29,6 +29,10 @@ const getInitialWidgetState = (): WidgetViewState => {
   return normalizeWidgetState(window.openai?.widgetState);
 };
 
+const getInitialSafeArea = (): OpenAiSafeArea => {
+  return window.openai?.safeArea ?? {};
+};
+
 const App = () => {
   const toolResult = useToolResult();
 
@@ -39,6 +43,7 @@ const App = () => {
   const [standaloneSelectedOfferId, setStandaloneSelectedOfferId] = useState<string | null>(null);
   const [displayMode, setDisplayMode] = useState<WidgetDisplayMode>(getInitialDisplayMode);
   const [widgetState, setWidgetState] = useState<WidgetViewState>(getInitialWidgetState);
+  const [safeArea, setSafeArea] = useState<OpenAiSafeArea>(getInitialSafeArea);
 
   const safeWidgetState = normalizeWidgetState(widgetState);
 
@@ -64,6 +69,10 @@ const App = () => {
     const handleGlobals = (event: WindowEventMap['openai:set_globals']) => {
       const globals = event.detail?.globals;
 
+      if (globals?.safeArea !== undefined) {
+        setSafeArea(globals.safeArea);
+      }
+
       if (globals?.displayMode !== undefined) {
         setDisplayMode(globals.displayMode);
       }
@@ -79,6 +88,14 @@ const App = () => {
       window.removeEventListener('openai:set_globals', handleGlobals);
     };
   }, [isStandalone]);
+
+  useEffect(() => {
+    if (isStandalone) {
+      return;
+    }
+
+    setSafeArea(window.openai?.safeArea ?? {});
+  }, [isStandalone, displayMode, isFullscreenDetail]);
 
   useEffect(() => {
     if (isStandalone) {
@@ -220,16 +237,17 @@ const App = () => {
 
   if (isFullscreenDetail && selectedOffer) {
     return (
-      <main className='App App--fullscreen'>
+      <main
+        className='App App--fullscreen'
+        style={
+          {
+            '--host-safe-area-bottom': `${safeArea.bottom ?? 0}px`,
+          } as CSSProperties
+        }>
         <OfferDetail offer={selectedOffer} onClose={handleCloseDetail} variant='fullscreen' />
       </main>
     );
   }
-
-  console.log(
-    'offers renderizados:',
-    offers.map((offer) => offer.modelCode),
-  );
 
   return (
     <main className='App'>

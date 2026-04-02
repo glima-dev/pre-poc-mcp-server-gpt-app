@@ -55,6 +55,11 @@ button {
   &--fullscreen {
     max-width: none;
     min-height: dvh(100);
+    padding-bottom: calc(var(--host-safe-area-bottom, px(0)) + px(176));
+
+    @include respond-to($desktop) {
+      padding-bottom: px(40);
+    }
   }
 
   &__header {
