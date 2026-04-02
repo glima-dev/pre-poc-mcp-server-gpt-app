@@ -30,7 +30,7 @@ const getInitialWidgetState = (): WidgetViewState => {
 };
 
 const App = () => {
-  const { toolResult, hasResolvedStructuredContent } = useToolResult();
+  const toolResult = useToolResult();
 
   const structuredContent = toolResult?.structuredContent;
 
@@ -44,8 +44,6 @@ const App = () => {
 
   const offers =
     (structuredContent?.offers as Offer[] | undefined) ?? (isStandalone ? localOffers : []);
-
-  const shouldShowEmptyState = isStandalone || hasResolvedStructuredContent;
 
   const selectedOfferId = isStandalone
     ? standaloneSelectedOfferId
@@ -228,6 +226,11 @@ const App = () => {
     );
   }
 
+  console.log(
+    'offers renderizados:',
+    offers.map((offer) => offer.modelCode),
+  );
+
   return (
     <main className='App'>
       <header className='App__header'>
@@ -235,11 +238,7 @@ const App = () => {
       </header>
 
       <section className='App__workspace'>
-        <OfferList
-          offers={offers}
-          onOfferClick={handleOpenOffer}
-          shouldShowEmptyState={shouldShowEmptyState}
-        />
+        <OfferList offers={offers} onOfferClick={handleOpenOffer} />
       </section>
 
       {isStandalone && selectedOffer && (

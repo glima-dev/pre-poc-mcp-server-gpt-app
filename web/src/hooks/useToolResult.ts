@@ -68,9 +68,6 @@ const getInitialToolResult = (): ToolResult => {
 const useToolResult = () => {
   const initialToolResult = useMemo(getInitialToolResult, []);
   const [toolResult, setToolResult] = useState<ToolResult>(initialToolResult);
-  const [hasResolvedStructuredContent, setHasResolvedStructuredContent] = useState(
-    Boolean(initialToolResult?.structuredContent),
-  );
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -95,7 +92,6 @@ const useToolResult = () => {
       }
 
       setToolResult(nextToolResult);
-      setHasResolvedStructuredContent(true);
     };
 
     const handleGlobals = (event: OpenAiGlobalsEvent) => {
@@ -108,7 +104,6 @@ const useToolResult = () => {
       setToolResult({
         structuredContent: toolOutput,
       });
-      setHasResolvedStructuredContent(true);
     };
 
     window.addEventListener('message', handleMessage, { passive: true });
@@ -120,10 +115,7 @@ const useToolResult = () => {
     };
   }, []);
 
-  return {
-    toolResult,
-    hasResolvedStructuredContent,
-  };
+  return toolResult;
 };
 
 export default useToolResult;

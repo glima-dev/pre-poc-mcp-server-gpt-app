@@ -16,26 +16,11 @@ import './index.scss';
 type Props = {
   offers: Offer[];
   onOfferClick?: (offer: Offer) => void;
-  shouldShowEmptyState?: boolean;
 };
 
-const OfferList = ({ offers, onOfferClick, shouldShowEmptyState = true }: Props) => {
+const OfferList = ({ offers, onOfferClick }: Props) => {
   if (!offers.length) {
-    if (!shouldShowEmptyState) {
-      return null;
-    }
-
-    return (
-      <section className='OfferList__empty' aria-live='polite'>
-        <div className='OfferList__empty-content'>
-          <h2 className='OfferList__empty-title'>Não encontramos ofertas para essa busca</h2>
-
-          <p className='OfferList__empty-text'>
-            Tente ajustar os filtros para visualizar outras opções de assinatura disponíveis.
-          </p>
-        </div>
-      </section>
-    );
+    return null;
   }
 
   return (

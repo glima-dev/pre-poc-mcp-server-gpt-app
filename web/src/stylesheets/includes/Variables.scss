@@ -11,43 +11,43 @@ $white: #ffffff;
 $black: #000000;
 $border: #cccccc;
 
-$app-background: #171b22;
-$surface-1: #1d232c;
-$surface-2: #222a35;
-$surface-3: #283242;
-$surface-card: #1f2630;
-$surface-card-top: #222a34;
-$surface-panel: #1c222c;
-$surface-muted: #252d38;
+$app-background: var(--app-background);
+$surface-1: var(--surface-1);
+$surface-2: var(--surface-2);
+$surface-3: var(--surface-3);
+$surface-card: var(--surface-card);
+$surface-card-top: var(--surface-card-top);
+$surface-panel: var(--surface-panel);
+$surface-muted: var(--surface-muted);
 
-$border-subtle: rgba(255, 255, 255, 0.08);
-$border-strong: rgba(255, 255, 255, 0.14);
+$border-subtle: var(--border-subtle);
+$border-strong: var(--border-strong);
 
-$text-primary: #f3f6fb;
-$text-secondary: #c5ced9;
-$text-muted: #8f99a7;
+$text-primary: var(--text-primary);
+$text-secondary: var(--text-secondary);
+$text-muted: var(--text-muted);
 
-$accent-primary: #4f6697;
-$accent-secondary: $secondary;
-$accent-soft: rgba(0, 176, 240, 0.12);
+$accent-primary: var(--accent-primary);
+$accent-secondary: var(--accent-secondary);
+$accent-soft: var(--accent-soft);
 
-$button-background: mix($secondary, $primary, 58%);
-$button-background-hover: mix($secondary, $primary, 72%);
-$button-text: $white;
+$button-background: var(--button-background);
+$button-background-hover: var(--button-background-hover);
+$button-text: var(--button-text);
 
-$image-gradient-start: #313843;
-$image-gradient-middle: #2b313b;
-$image-gradient-end: #393f49;
+$image-gradient-start: var(--image-gradient-start);
+$image-gradient-middle: var(--image-gradient-middle);
+$image-gradient-end: var(--image-gradient-end);
 
-$shadow-soft: 0 16px 40px rgba(0, 0, 0, 0.22);
-$shadow-card: 0 12px 28px rgba(0, 0, 0, 0.2);
+$shadow-soft: var(--shadow-soft);
+$shadow-card: var(--shadow-card);
 
 $scrollbar-size: 4px;
 $scrollbar-size-mobile: 3px;
 
-$scrollbar-track: transparent;
-$scrollbar-thumb: rgba(255, 255, 255, 0.08);
-$scrollbar-thumb-hover: rgba(255, 255, 255, 0.14);
+$scrollbar-track: var(--scrollbar-track);
+$scrollbar-thumb: var(--scrollbar-thumb);
+$scrollbar-thumb-hover: var(--scrollbar-thumb-hover);
 
 $border-radius-8: 8px;
 $border-radius-16: 16px;
