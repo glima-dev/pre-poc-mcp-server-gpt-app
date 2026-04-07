@@ -2,6 +2,107 @@
   overflow: visible;
   width: 100%;
 
+  &__header {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: px(10);
+    min-height: px(28);
+
+    @include respond-to($desktop) {
+      justify-content: space-between;
+      margin-bottom: px(14);
+      min-height: px(36);
+    }
+  }
+
+  &__pagination-wrap {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    @include respond-to($desktop) {
+      display: none;
+    }
+  }
+
+  &__pagination {
+    align-items: center;
+    display: inline-flex;
+    gap: px(6);
+    justify-content: center;
+    min-height: px(10);
+
+    .swiper-pagination-bullet {
+      background: $text-muted;
+      border-radius: 999px;
+      height: px(5);
+      margin: 0 !important;
+      opacity: 0.2;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        width 0.2s ease;
+      width: px(5);
+    }
+
+    .swiper-pagination-bullet-active {
+      background: $text-primary;
+      opacity: 0.72;
+      width: px(14);
+    }
+  }
+
+  &__nav {
+    display: none;
+
+    @include respond-to($desktop) {
+      align-items: center;
+      display: inline-flex;
+      gap: px(6);
+      justify-content: flex-end;
+    }
+  }
+
+  &__nav-button {
+    align-items: center;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: px(1) solid $border-subtle;
+    border-radius: px(999);
+    color: $text-secondary;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: px(15);
+    height: px(34);
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      opacity 0.2s ease;
+    width: px(34);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: $border-strong;
+      color: $text-primary;
+    }
+
+    &:focus-visible {
+      outline: px(2) solid $accent-soft;
+      outline-offset: px(2);
+    }
+
+    &.swiper-button-disabled {
+      cursor: default;
+      opacity: 0.24;
+      pointer-events: none;
+    }
+  }
+
   &__carousel {
     overflow: visible;
   }

@@ -12,21 +12,43 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
+import appConfig from './config/Env.js';
 import { offers } from './data/Offers.js';
 import {
   buildAppliedFilters,
   filterOffers,
 } from './lib/FilterOffers.js';
+import { OfferApiService } from './services/OfferApiService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = Number(process.env.PORT ?? 2091);
+const PORT = appConfig.port;
 const MCP_PATH = '/mcp';
 const TEMPLATE_URI = 'ui://widget/vw-offers-v5.html';
 
 const bundlePath = path.resolve(__dirname, '../../web/dist/bundle.js');
 const widgetBundle = readFileSync(bundlePath, 'utf8');
+
+const verifyOffersApiIntegration = async () => {
+  try {
+    const apiOffers = await OfferApiService.allRentalOffers();
+
+    console.log('[Offers API] integração ok');
+    console.log('[Offers API] ambiente:', appConfig.env);
+    console.log('[Offers API] endpoint:', appConfig.endpoint_gtiv2);
+    console.log(
+      '[Offers API] total retornado:',
+      Array.isArray(apiOffers) ? apiOffers.length : 'payload não-array',
+    );
+    console.log(
+      '[Offers API] amostra:',
+      Array.isArray(apiOffers) ? apiOffers.slice(0, 2) : apiOffers,
+    );
+  } catch (error) {
+    console.error('[Offers API] falha na integração:', error);
+  }
+};
 
 const buildTextFilterSchema = (description: string) =>
   z
@@ -456,4 +478,6 @@ const httpServer = createServer(async (req, res) => {
 
 httpServer.listen(PORT, () => {
   console.log(`LM Rental MCP server listening on http://localhost:${PORT}${MCP_PATH}`);
+
+  void verifyOffersApiIntegration();
 });

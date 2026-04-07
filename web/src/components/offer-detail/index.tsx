@@ -66,26 +66,31 @@ const OfferDetail = ({ offer, onClose, variant = 'inline' }: Props) => {
                 </div>
 
                 <div className='OfferDetail__item'>
-                  <dt className='OfferDetail__term'>Cor e pintura</dt>
-                  <dd className='OfferDetail__description-value'>{colorInfo}</dd>
-                </div>
-
-                <div className='OfferDetail__item'>
                   <dt className='OfferDetail__term'>Prazo de entrega</dt>
                   <dd className='OfferDetail__description-value'>{deliveryInfo}</dd>
                 </div>
 
                 <div className='OfferDetail__item OfferDetail__item--last'>
-                  <dt className='OfferDetail__term'>Disponibilidade</dt>
+                  {/*                   <dt className='OfferDetail__term'>Disponibilidade</dt>
                   <dd className='OfferDetail__description-value'>
                     {offer.bestCondition.isAvailability ? 'Disponível' : 'Indisponível'}
-                  </dd>
+                  </dd> */}
+
+                  <div className='OfferDetail__action'>
+                    <a
+                      className='OfferDetail__action-link'
+                      href={`https://vwsignanddrive.com.br/ofertasvw/${offer.slug}?versao=${offer.modelCode}`}
+                      target='_blank'
+                      rel='noreferrer'>
+                      Simular agora
+                    </a>
+                  </div>
                 </div>
               </dl>
             </div>
           </aside>
 
-          <div className='OfferDetail__action'>
+          {/*        <div className='OfferDetail__action'>
             <a
               className='OfferDetail__action-link'
               href={`https://vwsignanddrive.com.br/ofertasvw/${offer.slug}?versao=${offer.modelCode}`}
@@ -93,7 +98,7 @@ const OfferDetail = ({ offer, onClose, variant = 'inline' }: Props) => {
               rel='noreferrer'>
               Simular agora
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
